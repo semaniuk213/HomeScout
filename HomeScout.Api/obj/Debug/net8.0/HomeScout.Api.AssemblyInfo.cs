@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HomeScout.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dcfddbfedd9234203d6fdb3372e3ef6f21469af1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dcff719f1e72946266571462f451beba66c26b4a")]
 [assembly: System.Reflection.AssemblyProductAttribute("HomeScout.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HomeScout.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

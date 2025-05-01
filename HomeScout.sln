@@ -5,6 +5,10 @@ VisualStudioVersion = 17.13.35931.197 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeScout.Api", "HomeScout.Api\HomeScout.Api.csproj", "{7E0B2A93-00B3-41F2-B83F-7C5DAC9C874E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeScout.BLL", "HomeScout.BLL\HomeScout.BLL.csproj", "{B98FA582-448A-40F1-AB80-DD197D8DA639}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeScout.DAL", "HomeScout.DAL\HomeScout.DAL.csproj", "{7F4391EC-857F-4C0C-9570-BF959A967F49}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{7E0B2A93-00B3-41F2-B83F-7C5DAC9C874E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E0B2A93-00B3-41F2-B83F-7C5DAC9C874E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E0B2A93-00B3-41F2-B83F-7C5DAC9C874E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B98FA582-448A-40F1-AB80-DD197D8DA639}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B98FA582-448A-40F1-AB80-DD197D8DA639}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B98FA582-448A-40F1-AB80-DD197D8DA639}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B98FA582-448A-40F1-AB80-DD197D8DA639}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F4391EC-857F-4C0C-9570-BF959A967F49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F4391EC-857F-4C0C-9570-BF959A967F49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F4391EC-857F-4C0C-9570-BF959A967F49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F4391EC-857F-4C0C-9570-BF959A967F49}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
