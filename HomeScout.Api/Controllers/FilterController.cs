@@ -1,5 +1,8 @@
-﻿using HomeScout.BLL.DTOs;
+﻿using FluentValidation;
+using HomeScout.BLL.DTOs;
 using HomeScout.BLL.Services.Interfaces;
+using HomeScout.DAL.Helpers;
+using HomeScout.DAL.Parameters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,14 +13,19 @@ namespace HomeScout.Api.Controllers
     public class FilterController : ControllerBase
     {
         private readonly IFilterService _filterService;
+        private readonly IValidator<CreateFilterDto> _createFilterDtoValidator;
+        private readonly IValidator<UpdateFilterDto> _updateFilterDtoValidator;
 
-        public FilterController(IFilterService filterService)
+        public FilterController(IFilterService filterService, IValidator<CreateFilterDto> createFilterDtoValidator, IValidator<UpdateFilterDto> updateFilterDtoValidator)
         {
             _filterService = filterService;
+            _createFilterDtoValidator = createFilterDtoValidator;
+            _updateFilterDtoValidator = updateFilterDtoValidator;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<FilterDto>>> GetAll()
         {
             var filters = await _filterService.GetAllAsync();
@@ -27,6 +35,7 @@ namespace HomeScout.Api.Controllers
         [HttpGet("{id:int}")]
         [ProducesResponseType(typeof(FilterDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<FilterDto>> GetById(int id)
         {
             var filter = await _filterService.GetByIdAsync(id);
@@ -36,13 +45,25 @@ namespace HomeScout.Api.Controllers
             return Ok(filter);
         }
 
+        [HttpGet("search")]
+        [ProducesResponseType(typeof(PagedList<FilterDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<PagedList<FilterDto>>> GetFiltered([FromQuery] FilterParameters parameters)
+        {
+            var result = await _filterService.GetFilteredAsync(parameters);
+            return Ok(result);
+        }
+
+
         [HttpPost]
         [ProducesResponseType(typeof(FilterDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<FilterDto>> Create([FromBody] CreateFilterDto dto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            var validationResult = await _createFilterDtoValidator.ValidateAsync(dto);
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.Errors);
 
             var created = await _filterService.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
@@ -50,12 +71,14 @@ namespace HomeScout.Api.Controllers
 
         [HttpPut]
         [ProducesResponseType(typeof(FilterDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<FilterDto>> Update([FromBody] UpdateFilterDto dto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            var validationResult = await _updateFilterDtoValidator.ValidateAsync(dto);
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.Errors);
 
             var updated = await _filterService.UpdateAsync(dto);
             if (updated == null)
@@ -67,6 +90,7 @@ namespace HomeScout.Api.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {
             var success = await _filterService.DeleteAsync(id);

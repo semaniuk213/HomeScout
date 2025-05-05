@@ -2,6 +2,8 @@
 using HomeScout.BLL.DTOs;
 using HomeScout.BLL.Services.Interfaces;
 using HomeScout.DAL.Entities;
+using HomeScout.DAL.Helpers;
+using HomeScout.DAL.Parameters;
 using HomeScout.DAL.Repositories.Interfaces;
 
 namespace HomeScout.BLL.Services
@@ -48,6 +50,17 @@ namespace HomeScout.BLL.Services
             await _unitOfWork.CompleteAsync();
 
             return _mapper.Map<FilterDto>(existing);
+        }
+
+        public async Task<PagedList<FilterDto>> GetFilteredAsync(FilterParameters parameters)
+        {
+            var filters = await _unitOfWork.FilterRepository.GetFilteredAsync(parameters, new SortHelper<Filter>());
+            return PagedList<FilterDto>.Create(
+                _mapper.Map<List<FilterDto>>(filters),
+                filters.TotalCount,
+                filters.CurrentPage,
+                filters.PageSize
+            );
         }
 
         public async Task<bool> DeleteAsync(int id)

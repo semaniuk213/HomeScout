@@ -1,4 +1,6 @@
 ﻿using HomeScout.DAL.Data;
+using HomeScout.DAL.Helpers;
+using HomeScout.DAL.Parameters;
 using HomeScout.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,6 +40,15 @@ namespace HomeScout.DAL.Repositories
         public void Update(T entity)
         {
             dbSet.Update(entity);
+        }
+
+        public async Task<PagedList<T>> FindAsync(QueryStringParameters parameters, ISortHelper<T> sortHelper)
+        {
+            IQueryable<T> query = dbSet;
+
+            query = sortHelper.ApplySort(query, parameters.OrderBy);
+
+            return await PagedList<T>.ToPagedListAsync(query, parameters.PageNumber, parameters.PageSize);
         }
     }
 }

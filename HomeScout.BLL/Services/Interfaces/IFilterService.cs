@@ -1,4 +1,6 @@
 ﻿using HomeScout.BLL.DTOs;
+using HomeScout.DAL.Helpers;
+using HomeScout.DAL.Parameters;
 
 namespace HomeScout.BLL.Services.Interfaces
 {
@@ -8,6 +10,7 @@ namespace HomeScout.BLL.Services.Interfaces
         Task<FilterDto?> GetByIdAsync(int id);
         Task<FilterDto> CreateAsync(CreateFilterDto dto);
         Task<FilterDto?> UpdateAsync(UpdateFilterDto dto);
+        Task<PagedList<FilterDto>> GetFilteredAsync(FilterParameters parameters);
         Task<bool> DeleteAsync(int id);
     }
 }

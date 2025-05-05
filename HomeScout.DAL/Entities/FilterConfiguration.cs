@@ -13,9 +13,6 @@ namespace HomeScout.DAL.Entities
                    .IsRequired()
                    .HasMaxLength(100);
 
-            builder.HasIndex(f => f.Name)
-                   .IsUnique();
-
             builder.HasMany(f => f.Listings)
                    .WithOne(lf => lf.Filter)
                    .HasForeignKey(lf => lf.FilterId);

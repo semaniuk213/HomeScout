@@ -1,3 +1,6 @@
+using FluentValidation;
+using HomeScout.BLL.DTOs;
+using HomeScout.BLL.DTOs.Validators;
 using HomeScout.BLL.Profiles;
 using HomeScout.BLL.Services;
 using HomeScout.BLL.Services.Interfaces;
@@ -19,6 +22,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddAutoMapper(typeof(FilterProfile));
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateFilterDto>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateFilterDto>();
 
 builder.Services.AddScoped<IFilterService, FilterService>();
 
