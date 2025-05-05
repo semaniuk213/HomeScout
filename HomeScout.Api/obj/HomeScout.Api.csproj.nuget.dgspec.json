@@ -58,6 +58,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[14.0.0, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[8.0.1, )"
@@ -134,7 +138,11 @@
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "D:\\Programming\\C_Sharp\\HomeScout\\HomeScout.DAL\\HomeScout.DAL.csproj": {
+                "projectPath": "D:\\Programming\\C_Sharp\\HomeScout\\HomeScout.DAL\\HomeScout.DAL.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -152,6 +160,12 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[14.0.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

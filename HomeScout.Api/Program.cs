@@ -1,3 +1,6 @@
+using HomeScout.BLL.Profiles;
+using HomeScout.BLL.Services;
+using HomeScout.BLL.Services.Interfaces;
 using HomeScout.DAL.Data;
 using HomeScout.DAL.Repositories;
 using HomeScout.DAL.Repositories.Interfaces;
@@ -15,10 +18,16 @@ builder.Configuration
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddAutoMapper(typeof(FilterProfile));
+
+builder.Services.AddScoped<IFilterService, FilterService>();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IFilterRepository, FilterRepository>();
 builder.Services.AddScoped<IListingFilterRepository, ListingFilterRepository>();
-
+builder.Services.AddScoped<IListingRepository, ListingRepository>();
+builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -40,4 +49,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();

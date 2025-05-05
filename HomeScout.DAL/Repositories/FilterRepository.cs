@@ -10,11 +10,5 @@ namespace HomeScout.DAL.Repositories
         public FilterRepository(ApplicationDbContext context) : base(context)
         {
         }
-
-        public async Task<Filter?> GetByNameAsync(string name)
-        {
-            return await dbSet
-                .FirstOrDefaultAsync(f => f.Name == name);
-        }
     }
 }
