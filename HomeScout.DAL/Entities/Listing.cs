@@ -11,7 +11,7 @@
         public float Area { get; set; }
         public string Type { get; set; } 
         public DateTime CreatedAt { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
         public ICollection<Photo> Photos { get; set; }
         public ICollection<ListingFilter> Filters { get; set; }

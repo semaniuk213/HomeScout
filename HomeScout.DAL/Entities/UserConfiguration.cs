@@ -9,7 +9,7 @@ namespace HomeScout.DAL.Entities
         {
             builder.HasKey(u => u.Id);
 
-            builder.Property(u => u.FullName)
+            builder.Property(u => u.UserName)
                    .IsRequired()
                    .HasMaxLength(100);
 

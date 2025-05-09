@@ -34,7 +34,7 @@ namespace HomeScout.DAL.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Listing>> GetByUserIdAsync(int userId)
+        public async Task<IEnumerable<Listing>> GetByUserIdAsync(string userId)
         {
             return await IncludeAllRelations()
                 .Where(l => l.UserId == userId)

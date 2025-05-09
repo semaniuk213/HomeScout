@@ -11,10 +11,10 @@ namespace HomeScout.DAL.Repositories
         {
         }
 
-        public async Task<IEnumerable<User>> GetByFullNameAsync(string fullName)
+        public async Task<IEnumerable<User>> GetByFullNameAsync(string username)
         {
             return await dbSet
-                .Where(u => u.FullName.ToLower().Contains(fullName.ToLower()))
+                .Where(u => u.UserName.ToLower().Contains(username.ToLower()))
                 .ToListAsync();
         }
 

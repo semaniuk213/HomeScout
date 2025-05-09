@@ -6,7 +6,7 @@ namespace HomeScout.DAL.Repositories.Interfaces
     {
         Task<IEnumerable<Listing>> GetByTitleAsync(string title);
         Task<IEnumerable<Listing>> GetByCityAsync(string city);
-        Task<IEnumerable<Listing>> GetByUserIdAsync(int userId);
+        Task<IEnumerable<Listing>> GetByUserIdAsync(string userId);
         Task<IEnumerable<Listing>> GetByPriceRangeAsync(decimal minPrice, decimal maxPrice);
     }
 }
