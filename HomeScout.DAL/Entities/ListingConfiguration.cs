@@ -33,6 +33,7 @@ namespace HomeScout.DAL.Entities
 
             builder.Property(l => l.Type)
                    .IsRequired()
+                   .HasConversion<string>() 
                    .HasMaxLength(50);
 
             builder.ToTable(t =>

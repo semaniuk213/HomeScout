@@ -13,18 +13,18 @@ namespace HomeScout.Api.Controllers
     public class FilterController : ControllerBase
     {
         private readonly IFilterService _filterService;
-        private readonly IValidator<CreateFilterDto> _createFilterDtoValidator;
-        private readonly IValidator<UpdateFilterDto> _updateFilterDtoValidator;
+        private readonly IValidator<CreateFilterDto> _createFilterValidator;
+        private readonly IValidator<UpdateFilterDto> _updateFilterValidator;
 
-        public FilterController(IFilterService filterService, IValidator<CreateFilterDto> createFilterDtoValidator, IValidator<UpdateFilterDto> updateFilterDtoValidator)
+        public FilterController(IFilterService filterService, IValidator<CreateFilterDto> createFilterValidator, IValidator<UpdateFilterDto> updateFilterValidator)
         {
             _filterService = filterService;
-            _createFilterDtoValidator = createFilterDtoValidator;
-            _updateFilterDtoValidator = updateFilterDtoValidator;
+            _createFilterValidator = createFilterValidator;
+            _updateFilterValidator = updateFilterValidator;
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<FilterDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<FilterDto>>> GetAll()
         {
@@ -45,7 +45,7 @@ namespace HomeScout.Api.Controllers
             return Ok(filter);
         }
 
-        [HttpGet("search")]
+        [HttpGet("paginated")]
         [ProducesResponseType(typeof(PagedList<FilterDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<PagedList<FilterDto>>> GetFiltered([FromQuery] FilterParameters parameters)
@@ -61,7 +61,7 @@ namespace HomeScout.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<FilterDto>> Create([FromBody] CreateFilterDto dto)
         {
-            var validationResult = await _createFilterDtoValidator.ValidateAsync(dto);
+            var validationResult = await _createFilterValidator.ValidateAsync(dto);
             if (!validationResult.IsValid)
                 return BadRequest(validationResult.Errors);
 
@@ -69,18 +69,18 @@ namespace HomeScout.Api.Controllers
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
-        [HttpPut]
+        [HttpPut("{id:int}")]
         [ProducesResponseType(typeof(FilterDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<FilterDto>> Update([FromBody] UpdateFilterDto dto)
+        public async Task<ActionResult<FilterDto>> Update(int id, [FromBody] UpdateFilterDto dto)
         {
-            var validationResult = await _updateFilterDtoValidator.ValidateAsync(dto);
+            var validationResult = await _updateFilterValidator.ValidateAsync(dto);
             if (!validationResult.IsValid)
                 return BadRequest(validationResult.Errors);
 
-            var updated = await _filterService.UpdateAsync(dto);
+            var updated = await _filterService.UpdateAsync(id, dto);
             if (updated == null)
                 return NotFound();
 
@@ -93,10 +93,7 @@ namespace HomeScout.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {
-            var success = await _filterService.DeleteAsync(id);
-            if (!success)
-                return NotFound();
-
+            await _filterService.DeleteAsync(id);
             return NoContent();
         }
     }

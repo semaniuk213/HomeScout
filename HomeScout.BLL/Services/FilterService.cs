@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HomeScout.BLL.DTOs;
+using HomeScout.BLL.Exceptions;
 using HomeScout.BLL.Services.Interfaces;
 using HomeScout.DAL.Entities;
 using HomeScout.DAL.Helpers;
@@ -25,10 +26,13 @@ namespace HomeScout.BLL.Services
             return _mapper.Map<IEnumerable<FilterDto>>(filters);
         }
 
-        public async Task<FilterDto?> GetByIdAsync(int id)
+        public async Task<FilterDto> GetByIdAsync(int id)
         {
             var filter = await _unitOfWork.FilterRepository.GetByIdAsync(id);
-            return filter == null ? null : _mapper.Map<FilterDto>(filter);
+            if (filter == null)
+                throw new FilterNotFoundException($"Filter with id {id} not found.");
+
+            return _mapper.Map<FilterDto>(filter);
         }
 
         public async Task<FilterDto> CreateAsync(CreateFilterDto dto)
@@ -39,11 +43,11 @@ namespace HomeScout.BLL.Services
             return _mapper.Map<FilterDto>(filter);
         }
 
-        public async Task<FilterDto?> UpdateAsync(UpdateFilterDto dto)
+        public async Task<FilterDto> UpdateAsync(int id, UpdateFilterDto dto)
         {
-            var existing = await _unitOfWork.FilterRepository.GetByIdAsync(dto.Id);
+            var existing = await _unitOfWork.FilterRepository.GetByIdAsync(id);
             if (existing == null)
-                return null;
+                throw new FilterNotFoundException($"Filter with id {id} not found.");
 
             _mapper.Map(dto, existing);
             _unitOfWork.FilterRepository.Update(existing);
@@ -63,14 +67,14 @@ namespace HomeScout.BLL.Services
             );
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
             var existing = await _unitOfWork.FilterRepository.GetByIdAsync(id);
-            if (existing == null) return false;
+            if (existing == null)
+                throw new FilterNotFoundException($"Filter with id {id} not found.");
 
             _unitOfWork.FilterRepository.Remove(existing);
             await _unitOfWork.CompleteAsync();
-            return true;
         }
     }
 }
