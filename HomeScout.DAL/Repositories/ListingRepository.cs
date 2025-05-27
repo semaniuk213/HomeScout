@@ -22,13 +22,6 @@ namespace HomeScout.DAL.Repositories
             return await IncludeAllRelations()
                 .FirstOrDefaultAsync(l => l.Id == id);
         }
-        public async Task<IEnumerable<Listing>> GetByTitleAsync(string title)
-        {
-            return await IncludeAllRelations()
-                .Where(l => l.Title.ToLower().Contains(title.ToLower()))
-                .ToListAsync();
-        }
-
         public async Task<IEnumerable<Listing>> GetByUserIdAsync(string userId)
         {
             return await IncludeAllRelations()

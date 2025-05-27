@@ -36,22 +36,6 @@ namespace HomeScout.BLL.Services
                 users.PageSize
             );
         }
-
-        public async Task<UserDto> GetByUserNameAsync(string userName)
-        {
-            var user = await _unitOfWork.UserRepository.GetByUserNameAsync(userName);
-            if (user == null)
-                throw new UserNotFoundException($"User with username {userName} not found.");
-
-            return _mapper.Map<UserDto>(user);
-        }
-
-        public async Task<IEnumerable<UserDto>> GetByRoleAsync(string role)
-        {
-            var users = await _unitOfWork.UserRepository.GetByRoleAsync(role);
-            return _mapper.Map<IEnumerable<UserDto>>(users);
-        }
-
         public async Task<UserDto> GetByIdAsync(string id)
         {
             var user = await _unitOfWork.UserRepository.GetByIdAsync(id);

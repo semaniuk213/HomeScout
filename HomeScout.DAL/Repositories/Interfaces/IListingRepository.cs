@@ -6,7 +6,6 @@ namespace HomeScout.DAL.Repositories.Interfaces
 {
     public interface IListingRepository : IGenericRepository<Listing>
     {
-        Task<IEnumerable<Listing>> GetByTitleAsync(string title);
         Task<IEnumerable<Listing>> GetByUserIdAsync(string userId);
         Task<PagedList<Listing>> GetAllPaginatedAsync(ListingParameters parameters, ISortHelper<Listing> sortHelper);
     }

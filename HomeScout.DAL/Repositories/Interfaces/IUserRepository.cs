@@ -8,7 +8,5 @@ namespace HomeScout.DAL.Repositories.Interfaces
     {
         Task<PagedList<User>> GetAllPaginatedAsync(UserParameters parameters, ISortHelper<User> sortHelper);
         Task<User?> GetByIdAsync(string id);
-        Task<User?> GetByUserNameAsync(string userName);
-        Task<IEnumerable<User>> GetByRoleAsync(string role);
     }
 }

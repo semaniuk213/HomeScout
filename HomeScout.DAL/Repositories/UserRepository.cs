@@ -32,18 +32,5 @@ namespace HomeScout.DAL.Repositories
         {
             return await dbSet.FirstOrDefaultAsync(u => u.Id == id);
         }
-
-        public async Task<User?> GetByUserNameAsync(string userName)
-        {
-            return await dbSet
-                .FirstOrDefaultAsync(u => u.UserName.ToLower() == userName.ToLower());
-        }
-
-        public async Task<IEnumerable<User>> GetByRoleAsync(string role)
-        {
-            return await dbSet
-                .Where(u => u.Role.ToLower() == role.ToLower())
-                .ToListAsync();
-        }
     }
 }

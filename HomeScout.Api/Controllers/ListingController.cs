@@ -54,15 +54,6 @@ namespace HomeScout.Api.Controllers
             return Ok(listing);
         }
 
-        [HttpGet("title/{title}")]
-        [ProducesResponseType(typeof(IEnumerable<ListingDto>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<ListingDto>>> GetByTitle(string title)
-        {
-            var listings = await _listingService.GetByTitleAsync(title);
-            return Ok(listings);
-        }
-
         [HttpGet("user/{userId}")]
         [ProducesResponseType(typeof(IEnumerable<ListingDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

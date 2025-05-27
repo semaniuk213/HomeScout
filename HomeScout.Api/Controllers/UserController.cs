@@ -51,25 +51,6 @@ namespace HomeScout.Api.Controllers
             return Ok(user);
         }
 
-        [HttpGet("by-username/{username}")]
-        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<UserDto>> GetByUsername(string username)
-        {
-            var user = await _userService.GetByUserNameAsync(username);
-            return Ok(user);
-        }
-
-        [HttpGet("by-role/{role}")]
-        [ProducesResponseType(typeof(IEnumerable<UserDto>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetByRole(string role)
-        {
-            var users = await _userService.GetByRoleAsync(role);
-            return Ok(users);
-        }
-
         [HttpPost]
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
