@@ -45,7 +45,7 @@ namespace HomeScout.Api.Controllers
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<UserDto>> GetById(string id)
+        public async Task<ActionResult<UserDto>> GetById(Guid id)
         {
             var user = await _userService.GetByIdAsync(id);
             return Ok(user);
@@ -70,7 +70,7 @@ namespace HomeScout.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<UserDto>> Update(string id, [FromBody] UpdateUserDto dto)
+        public async Task<ActionResult<UserDto>> Update(Guid id, [FromBody] UpdateUserDto dto)
         {
             var validationResult = await _updateUserValidator.ValidateAsync(dto);
             if (!validationResult.IsValid)
@@ -84,7 +84,7 @@ namespace HomeScout.Api.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             await _userService.DeleteAsync(id);
             return NoContent();

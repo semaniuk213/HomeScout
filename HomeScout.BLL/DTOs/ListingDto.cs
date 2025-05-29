@@ -14,7 +14,7 @@ namespace HomeScout.BLL.DTOs
         public ListingType Type { get; set; }
         public string TypeAsString { get; set; }
         public DateTime CreatedAt { get; set; }
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public string UserName { get; set; } 
         public List<PhotoDto> Photos { get; set; }
         public List<ListingFilterDto> Filters { get; set; }

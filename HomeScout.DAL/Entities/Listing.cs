@@ -11,9 +11,9 @@
         public float Area { get; set; }
         public ListingType Type { get; set; }
         public DateTime CreatedAt { get; set; }
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public User User { get; set; }
-        public ICollection<Photo> Photos { get; set; }
-        public ICollection<ListingFilter> Filters { get; set; }
+        public ICollection<Photo> Photos { get; set; } = new List<Photo>();
+        public ICollection<ListingFilter> Filters { get; set; } = new List<ListingFilter>();
     }
 }

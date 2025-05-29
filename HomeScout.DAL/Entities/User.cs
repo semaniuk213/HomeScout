@@ -1,12 +1,9 @@
-﻿namespace HomeScout.DAL.Entities
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace HomeScout.DAL.Entities
 {
-    public class User
+    public class User : IdentityUser<Guid>
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
-        public string UserName { get; set; }
-        public string Email { get; set; }
-        public string Password {  get; set; }
-        public string Role { get; set; } = "User";
-        public ICollection<Listing> Listings { get; set; }
+        public ICollection<Listing> Listings { get; set; } = new List<Listing>();
     }
 }

@@ -17,11 +17,6 @@ namespace HomeScout.BLL.DTOs.Validators
             RuleFor(x => x.Password)
                 .NotEmpty().WithMessage("Password is required.")
                 .MinimumLength(6).WithMessage("Password must be at least 6 characters.");
-
-            RuleFor(x => x.Role)
-                .NotEmpty().WithMessage("Role is required.")
-                .Must(role => role == "User" || role == "Admin")
-                .WithMessage("Role must be either 'User' or 'Admin'.");
         }
     }
 }

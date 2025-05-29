@@ -20,14 +20,6 @@ namespace HomeScout.DAL.Entities
             builder.HasIndex(u => u.Email)
                    .IsUnique();
 
-            builder.Property(u => u.Password)
-                   .IsRequired()
-                   .HasMaxLength(100);
-
-            builder.Property(u => u.Role)
-                   .IsRequired()
-                   .HasDefaultValue("User");
-
             builder.HasMany(u => u.Listings)
                    .WithOne(l => l.User)
                    .HasForeignKey(l => l.UserId)

@@ -46,7 +46,7 @@ namespace HomeScout.BLL.Services
             return _mapper.Map<ListingDto>(listing);
         }
 
-        public async Task<IEnumerable<ListingDto>> GetByUserIdAsync(string userId)
+        public async Task<IEnumerable<ListingDto>> GetByUserIdAsync(Guid userId)
         {
             var listings = await _unitOfWork.ListingRepository.GetByUserIdAsync(userId);
             return _mapper.Map<IEnumerable<ListingDto>>(listings);

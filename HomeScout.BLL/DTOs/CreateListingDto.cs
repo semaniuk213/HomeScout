@@ -11,6 +11,6 @@ namespace HomeScout.BLL.DTOs
         public decimal Price { get; set; }
         public float Area { get; set; }
         public string Type { get; set; }
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
     }
 }

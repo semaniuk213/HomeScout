@@ -28,7 +28,7 @@ namespace HomeScout.DAL.Repositories
             return await PagedList<User>.ToPagedListAsync(query, parameters.PageNumber, parameters.PageSize);
         }
 
-        public async Task<User?> GetByIdAsync(string id)
+        public async Task<User?> GetByIdAsync(Guid id)
         {
             return await dbSet.FirstOrDefaultAsync(u => u.Id == id);
         }
