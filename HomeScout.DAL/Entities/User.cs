@@ -4,6 +4,7 @@ namespace HomeScout.DAL.Entities
 {
     public class User : IdentityUser<Guid>
     {
-        public ICollection<Listing> Listings { get; set; } = new List<Listing>();
+        public List<Listing> Listings { get; set; } = new ();
+        public List<RefreshToken> RefreshTokens { get; set; } = new();
     }
 }

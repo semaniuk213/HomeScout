@@ -65,6 +65,28 @@ namespace HomeScout.BLL.Services
             return await MapUserToDtoAsync(user);
         }
 
+        public async Task<UserDto> ChangeUserRoleAsync(Guid userId, string newRole)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null)
+                throw new UserNotFoundException($"User with id {userId} not found.");
+
+            var currentRoles = await _userManager.GetRolesAsync(user);
+
+            if (currentRoles.Any())
+            {
+                var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+                if (!removeResult.Succeeded)
+                    throw new Exception($"Failed to remove current roles: {string.Join(", ", removeResult.Errors.Select(e => e.Description))}");
+            }
+
+            var addResult = await _userManager.AddToRoleAsync(user, newRole);
+            if (!addResult.Succeeded)
+                throw new Exception($"Failed to assign new role: {string.Join(", ", addResult.Errors.Select(e => e.Description))}");
+
+            return await MapUserToDtoAsync(user);
+        }
+
         public async Task<UserDto> UpdateAsync(Guid id, UpdateUserDto dto)
         {
             var existing = await _unitOfWork.UserRepository.GetByIdAsync(id);

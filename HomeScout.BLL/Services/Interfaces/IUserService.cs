@@ -10,6 +10,7 @@ namespace HomeScout.BLL.Services.Interfaces
         Task<PagedList<UserDto>> GetAllPaginatedAsync(UserParameters parameters);
         Task<UserDto> GetByIdAsync(Guid id);
         Task<UserDto> CreateAsync(CreateUserDto dto);
+        Task<UserDto> ChangeUserRoleAsync(Guid userId, string newRole);
         Task<UserDto> UpdateAsync(Guid id, UpdateUserDto dto);
         Task DeleteAsync(Guid id);
     }

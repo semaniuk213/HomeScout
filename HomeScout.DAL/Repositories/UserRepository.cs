@@ -28,6 +28,13 @@ namespace HomeScout.DAL.Repositories
             return await PagedList<User>.ToPagedListAsync(query, parameters.PageNumber, parameters.PageSize);
         }
 
+        public async Task<User?> GetByRefreshTokenAsync(string refreshToken)
+        {
+            return await dbSet
+                .Where(u => u.RefreshTokens.Any(rt => rt.Token == refreshToken))
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<User?> GetByIdAsync(Guid id)
         {
             return await dbSet.FirstOrDefaultAsync(u => u.Id == id);

@@ -7,6 +7,7 @@ namespace HomeScout.DAL.Repositories.Interfaces
     public interface IUserRepository : IGenericRepository<User>
     {
         Task<PagedList<User>> GetAllPaginatedAsync(UserParameters parameters, ISortHelper<User> sortHelper);
+        Task<User?> GetByRefreshTokenAsync(string refreshToken);
         Task<User?> GetByIdAsync(Guid id);
     }
 }

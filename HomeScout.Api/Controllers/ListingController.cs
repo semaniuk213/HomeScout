@@ -3,6 +3,7 @@ using HomeScout.BLL.DTOs;
 using HomeScout.BLL.Services.Interfaces;
 using HomeScout.DAL.Helpers;
 using HomeScout.DAL.Parameters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeScout.Api.Controllers
@@ -63,6 +64,7 @@ namespace HomeScout.Api.Controllers
             return Ok(listings);
         }
 
+        [Authorize]
         [HttpPost]
         [ProducesResponseType(typeof(ListingDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -77,6 +79,7 @@ namespace HomeScout.Api.Controllers
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
+        [Authorize]
         [HttpPut("{id:int}")]
         [ProducesResponseType(typeof(ListingDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -95,6 +98,7 @@ namespace HomeScout.Api.Controllers
             return Ok(updated);
         }
 
+        [Authorize]
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

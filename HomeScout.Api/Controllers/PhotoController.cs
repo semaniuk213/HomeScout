@@ -3,11 +3,13 @@ using HomeScout.BLL.DTOs;
 using HomeScout.BLL.Services.Interfaces;
 using HomeScout.DAL.Helpers;
 using HomeScout.DAL.Parameters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeScout.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PhotoController : ControllerBase
@@ -23,6 +25,7 @@ namespace HomeScout.Api.Controllers
             _updatePhotoValidator = updatePhotoValidator;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<PhotoDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -31,7 +34,6 @@ namespace HomeScout.Api.Controllers
             var photos = await _photoService.GetAllAsync();
             return Ok(photos);
         }
-
 
         [HttpGet("paginated")]
         [ProducesResponseType(typeof(PagedList<PhotoDto>), StatusCodes.Status200OK)]
