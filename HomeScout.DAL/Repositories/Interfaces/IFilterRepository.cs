@@ -6,6 +6,6 @@ namespace HomeScout.DAL.Repositories.Interfaces
 {
     public interface IFilterRepository : IGenericRepository<Filter>
     {
-        Task<PagedList<Filter>> GetFilteredAsync(FilterParameters parameters, ISortHelper<Filter> sortHelper);
+        Task<PagedList<Filter>> GetFilteredAsync(FilterParameters parameters, ISortHelper<Filter> sortHelper, CancellationToken cancellationToken = default);
     }
 }

@@ -9,8 +9,8 @@ namespace HomeScout.BLL.Profiles
         public ListingFilterProfile()
         {
             CreateMap<ListingFilter, ListingFilterDto>()
-                .ForMember(dest => dest.ListingTitle, opt => opt.MapFrom(src => src.Listing.Title))  
-                .ForMember(dest => dest.FilterName, opt => opt.MapFrom(src => src.Filter.Name)); 
+                .ForMember(dest => dest.ListingTitle, opt => opt.MapFrom(src => src.Listing != null ? src.Listing.Title : string.Empty))
+                .ForMember(dest => dest.FilterName, opt => opt.MapFrom(src => src.Filter != null ? src.Filter.Name : string.Empty));
 
             CreateMap<CreateListingFilterDto, ListingFilter>();
             CreateMap<UpdateListingFilterDto, ListingFilter>();

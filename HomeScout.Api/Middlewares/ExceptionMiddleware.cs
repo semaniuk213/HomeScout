@@ -1,4 +1,5 @@
 ﻿using HomeScout.BLL.Exceptions;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Text.Json;
 
@@ -34,12 +35,13 @@ namespace HomeScout.Api.Middlewares
 
             var (statusCode, message) = exception switch
             {
-                UserNotFoundException => (HttpStatusCode.NotFound, exception.Message),
+                OwnerNotFoundException => (HttpStatusCode.NotFound, exception.Message),
                 PhotoNotFoundException => (HttpStatusCode.NotFound, exception.Message),
                 ListingNotFoundException => (HttpStatusCode.NotFound, exception.Message),
                 FilterNotFoundException => (HttpStatusCode.NotFound, exception.Message),
                 ListingFilterNotFoundException => (HttpStatusCode.NotFound, exception.Message),
                 ArgumentException => (HttpStatusCode.BadRequest, exception.Message),
+                DbUpdateException => (HttpStatusCode.BadRequest, "Database update error occurred."),
                 _ => (HttpStatusCode.InternalServerError, "An unexpected error occurred.")
             };
 

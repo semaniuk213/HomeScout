@@ -9,33 +9,26 @@ namespace HomeScout.DAL.Repositories
 {
     public class PhotoRepository : GenericRepository<Photo>, IPhotoRepository
     {
-        public PhotoRepository(ApplicationDbContext context) : base(context)
-        {
-        }
+        public PhotoRepository(ApplicationDbContext context) : base(context) { }
 
-        public override async Task<Photo?> GetByIdAsync(int id)
+        public override async Task<Photo?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             return await dbSet
                 .Include(p => p.Listing)
-                .FirstOrDefaultAsync(p => p.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
         }
 
-        public override async Task<IEnumerable<Photo>> GetAllAsync()
-        {
-            return await dbSet 
-                .Include(p => p.Listing)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<Photo>> GetByListingIdAsync(int listingId)
+        public override async Task<IEnumerable<Photo>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             return await dbSet
                 .Include(p => p.Listing)
-                .Where(p => p.ListingId == listingId)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task<PagedList<Photo>> GetAllPaginatedAsync(PhotoParameters parameters, ISortHelper<Photo> sortHelper)
+        public async Task<PagedList<Photo>> GetAllPaginatedAsync(
+            PhotoParameters parameters,
+            ISortHelper<Photo> sortHelper,
+            CancellationToken cancellationToken = default)
         {
             var query = dbSet
                 .Include(p => p.Listing)
@@ -49,8 +42,7 @@ namespace HomeScout.DAL.Repositories
 
             query = sortHelper.ApplySort(query, parameters.OrderBy);
 
-            return await PagedList<Photo>.ToPagedListAsync(query, parameters.PageNumber, parameters.PageSize);
+            return await PagedList<Photo>.ToPagedListAsync(query, parameters.PageNumber, parameters.PageSize, cancellationToken);
         }
-
     }
 }

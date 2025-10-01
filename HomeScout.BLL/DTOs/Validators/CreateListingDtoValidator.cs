@@ -33,8 +33,8 @@ namespace HomeScout.BLL.DTOs.Validators
                 .Must(t => t == "Rent" || t == "Sale")
                 .WithMessage("Type must be either 'Rent' or 'Sale'.");
 
-            RuleFor(x => x.UserId)
-                .NotEmpty().WithMessage("UserId is required.");
+            RuleFor(x => x.OwnerId)
+                .NotEmpty().WithMessage("OwnerId is required.");
         }
     }
 }

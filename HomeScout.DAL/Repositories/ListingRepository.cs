@@ -9,27 +9,23 @@ namespace HomeScout.DAL.Repositories
 {
     public class ListingRepository : GenericRepository<Listing>, IListingRepository
     {
-        public ListingRepository(ApplicationDbContext context) : base(context)
+        public ListingRepository(ApplicationDbContext context) : base(context) { }
+
+        public override async Task<IEnumerable<Listing>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-        }
-        public override async Task<IEnumerable<Listing>> GetAllAsync()
-        {
-            return await IncludeAllRelations().ToListAsync();
+            return await IncludeAllRelations().ToListAsync(cancellationToken);
         }
 
-        public override async Task<Listing?> GetByIdAsync(int id)
+        public override async Task<Listing?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             return await IncludeAllRelations()
-                .FirstOrDefaultAsync(l => l.Id == id);
-        }
-        public async Task<IEnumerable<Listing>> GetByUserIdAsync(Guid userId)
-        {
-            return await IncludeAllRelations()
-                .Where(l => l.UserId == userId)
-                .ToListAsync();
+                .FirstOrDefaultAsync(l => l.Id == id, cancellationToken);
         }
 
-        public async Task<PagedList<Listing>> GetAllPaginatedAsync(ListingParameters parameters, ISortHelper<Listing> sortHelper)
+        public async Task<PagedList<Listing>> GetAllPaginatedAsync(
+            ListingParameters parameters,
+            ISortHelper<Listing> sortHelper,
+            CancellationToken cancellationToken = default)
         {
             var query = IncludeAllRelations();
 
@@ -42,14 +38,8 @@ namespace HomeScout.DAL.Repositories
             if (!string.IsNullOrWhiteSpace(parameters.Address))
                 query = query.Where(l => l.Address.ToLower().Contains(parameters.Address.ToLower()));
 
-            if (parameters.Type.HasValue)  
-            {
-                var typeString = parameters.Type.ToString(); 
-
-                if (!string.IsNullOrWhiteSpace(typeString))  
-                    if (Enum.TryParse<ListingType>(typeString, true, out var typeEnum))
-                        query = query.Where(l => l.Type == typeEnum);
-            }
+            if (parameters.Type.HasValue)
+                query = query.Where(l => l.Type == parameters.Type.Value);
 
             if (parameters.MinPrice.HasValue)
                 query = query.Where(l => l.Price >= parameters.MinPrice.Value);
@@ -63,14 +53,16 @@ namespace HomeScout.DAL.Repositories
             if (parameters.CreatedBefore.HasValue)
                 query = query.Where(l => l.CreatedAt <= parameters.CreatedBefore.Value);
 
-            if (!string.IsNullOrWhiteSpace(parameters.UserName))
-                query = query.Where(l => l.User.UserName.ToLower().Contains(parameters.UserName.ToLower()));
+            if (parameters.OwnerId.HasValue)
+                query = query.Where(l => l.OwnerId == parameters.OwnerId.Value);
+
+            if (!string.IsNullOrWhiteSpace(parameters.OwnerName))
+                query = query.Where(l => l.Owner.Name.ToLower().Contains(parameters.OwnerName.ToLower()));
 
             query = sortHelper.ApplySort(query, parameters.OrderBy);
 
-            return await PagedList<Listing>.ToPagedListAsync(query, parameters.PageNumber, parameters.PageSize);
+            return await PagedList<Listing>.ToPagedListAsync(query, parameters.PageNumber, parameters.PageSize, cancellationToken);
         }
-
 
         private IQueryable<Listing> IncludeAllRelations()
         {
@@ -78,7 +70,7 @@ namespace HomeScout.DAL.Repositories
                 .Include(l => l.Photos)
                 .Include(l => l.Filters)
                     .ThenInclude(f => f.Filter)
-                .Include(l => l.User);
+                .Include(l => l.Owner);
         }
     }
 }

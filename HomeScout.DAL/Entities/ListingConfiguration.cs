@@ -44,18 +44,20 @@ namespace HomeScout.DAL.Entities
             builder.Property(l => l.CreatedAt)
                    .IsRequired();
 
-            builder.HasOne(l => l.User)
-                   .WithMany(u => u.Listings)
-                   .HasForeignKey(l => l.UserId)
+            builder.HasOne(l => l.Owner)
+                   .WithMany(o => o.Listings)
+                   .HasForeignKey(l => l.OwnerId)
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(l => l.Photos)
                    .WithOne(p => p.Listing)
-                   .HasForeignKey(p => p.ListingId);
+                   .HasForeignKey(p => p.ListingId)
+                   .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(l => l.Filters)
                    .WithOne(lf => lf.Listing)
-                   .HasForeignKey(lf => lf.ListingId);
+                   .HasForeignKey(lf => lf.ListingId)
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -12,6 +12,7 @@ namespace HomeScout.DAL.Parameters
         public decimal? MaxPrice { get; set; }
         public DateTime? CreatedAfter { get; set; }
         public DateTime? CreatedBefore { get; set; }
-        public string? UserName { get; set; }
+        public int? OwnerId { get; set; }
+        public string? OwnerName { get; set; }
     }
 }

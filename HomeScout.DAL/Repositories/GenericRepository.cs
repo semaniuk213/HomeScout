@@ -17,19 +17,19 @@ namespace HomeScout.DAL.Repositories
             dbSet = context.Set<T>();
         }
 
-        public virtual async Task<IEnumerable<T>> GetAllAsync()
+        public virtual async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return await dbSet.ToListAsync();
+            return await dbSet.ToListAsync(cancellationToken);
         }
 
-        public virtual async Task<T?> GetByIdAsync(int id)
+        public virtual async Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            return await dbSet.FindAsync(id);
+            return await dbSet.FindAsync(new object[] { id }, cancellationToken);
         }
 
-        public async Task AddAsync(T entity)
+        public async Task AddAsync(T entity, CancellationToken cancellationToken = default)
         {
-            await dbSet.AddAsync(entity);
+            await dbSet.AddAsync(entity, cancellationToken);
         }
 
         public void Remove(T entity)
@@ -42,13 +42,13 @@ namespace HomeScout.DAL.Repositories
             dbSet.Update(entity);
         }
 
-        public async Task<PagedList<T>> FindAsync(QueryStringParameters parameters, ISortHelper<T> sortHelper)
+        public async Task<PagedList<T>> FindAsync(QueryStringParameters parameters, ISortHelper<T> sortHelper, CancellationToken cancellationToken = default)
         {
             IQueryable<T> query = dbSet;
 
             query = sortHelper.ApplySort(query, parameters.OrderBy);
 
-            return await PagedList<T>.ToPagedListAsync(query, parameters.PageNumber, parameters.PageSize);
+            return await PagedList<T>.ToPagedListAsync(query, parameters.PageNumber, parameters.PageSize, cancellationToken);
         }
     }
 }

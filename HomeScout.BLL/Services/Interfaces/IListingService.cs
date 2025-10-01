@@ -6,12 +6,10 @@ namespace HomeScout.BLL.Services.Interfaces
 {
     public interface IListingService
     {
-        Task<IEnumerable<ListingDto>> GetAllAsync();
-        Task<PagedList<ListingDto>> GetAllPaginatedAsync(ListingParameters parameters);
-        Task<ListingDto> GetByIdAsync(int id);
-        Task<IEnumerable<ListingDto>> GetByUserIdAsync(Guid userId);
-        Task<ListingDto> CreateAsync(CreateListingDto dto);
-        Task<ListingDto> UpdateAsync(int id, UpdateListingDto dto);
-        Task DeleteAsync(int id);
+        Task<PagedList<ListingDto>> GetAllAsync(ListingParameters parameters, CancellationToken cancellationToken = default);
+        Task<ListingDto> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<ListingDto> CreateAsync(CreateListingDto dto, CancellationToken cancellationToken = default);
+        Task<ListingDto> UpdateAsync(int id, UpdateListingDto dto, CancellationToken cancellationToken = default);
+        Task DeleteAsync(int id, CancellationToken cancellationToken = default);
     }
 }

@@ -6,7 +6,7 @@
         IListingRepository ListingRepository { get; }
         IListingFilterRepository ListingFilterRepository { get; }
         IPhotoRepository PhotoRepository { get; }
-        IUserRepository UserRepository { get; }
-        Task CompleteAsync();
+        IOwnerRepository OwnerRepository { get; }
+        Task CompleteAsync(CancellationToken cancellationToken = default);
     }
 }

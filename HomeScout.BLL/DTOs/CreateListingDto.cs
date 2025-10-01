@@ -1,16 +1,14 @@
-﻿using HomeScout.DAL.Entities;
-
-namespace HomeScout.BLL.DTOs
+﻿namespace HomeScout.BLL.DTOs
 {
     public class CreateListingDto
     {
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
         public string? Description { get; set; }
-        public string Address { get; set; }
-        public string City { get; set; }
+        public string Address { get; set; } = string.Empty;
+        public string City { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public float Area { get; set; }
-        public string Type { get; set; }
-        public Guid UserId { get; set; }
+        public string Type { get; set; } = string.Empty;
+        public int OwnerId { get; set; }
     }
 }

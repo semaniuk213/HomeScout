@@ -20,45 +20,11 @@ namespace HomeScout.BLL.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<FilterDto>> GetAllAsync()
+        public async Task<PagedList<FilterDto>> GetAllAsync(FilterParameters parameters, CancellationToken cancellationToken = default)
         {
-            var filters = await _unitOfWork.FilterRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<FilterDto>>(filters);
-        }
+            var filters = await _unitOfWork.FilterRepository
+                .GetFilteredAsync(parameters, new SortHelper<Filter>(), cancellationToken);
 
-        public async Task<FilterDto> GetByIdAsync(int id)
-        {
-            var filter = await _unitOfWork.FilterRepository.GetByIdAsync(id);
-            if (filter == null)
-                throw new FilterNotFoundException($"Filter with id {id} not found.");
-
-            return _mapper.Map<FilterDto>(filter);
-        }
-
-        public async Task<FilterDto> CreateAsync(CreateFilterDto dto)
-        {
-            var filter = _mapper.Map<Filter>(dto);
-            await _unitOfWork.FilterRepository.AddAsync(filter);
-            await _unitOfWork.CompleteAsync();
-            return _mapper.Map<FilterDto>(filter);
-        }
-
-        public async Task<FilterDto> UpdateAsync(int id, UpdateFilterDto dto)
-        {
-            var existing = await _unitOfWork.FilterRepository.GetByIdAsync(id);
-            if (existing == null)
-                throw new FilterNotFoundException($"Filter with id {id} not found.");
-
-            _mapper.Map(dto, existing);
-            _unitOfWork.FilterRepository.Update(existing);
-            await _unitOfWork.CompleteAsync();
-
-            return _mapper.Map<FilterDto>(existing);
-        }
-
-        public async Task<PagedList<FilterDto>> GetFilteredAsync(FilterParameters parameters)
-        {
-            var filters = await _unitOfWork.FilterRepository.GetFilteredAsync(parameters, new SortHelper<Filter>());
             return PagedList<FilterDto>.Create(
                 _mapper.Map<List<FilterDto>>(filters),
                 filters.TotalCount,
@@ -67,14 +33,44 @@ namespace HomeScout.BLL.Services
             );
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<FilterDto> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            var existing = await _unitOfWork.FilterRepository.GetByIdAsync(id);
+            var filter = await _unitOfWork.FilterRepository.GetByIdAsync(id, cancellationToken);
+            if (filter == null)
+                throw new FilterNotFoundException($"Filter with id {id} not found.");
+
+            return _mapper.Map<FilterDto>(filter);
+        }
+
+        public async Task<FilterDto> CreateAsync(CreateFilterDto dto, CancellationToken cancellationToken = default)
+        {
+            var filter = _mapper.Map<Filter>(dto);
+            await _unitOfWork.FilterRepository.AddAsync(filter, cancellationToken);
+            await _unitOfWork.CompleteAsync(cancellationToken);
+            return _mapper.Map<FilterDto>(filter);
+        }
+
+        public async Task<FilterDto> UpdateAsync(int id, UpdateFilterDto dto, CancellationToken cancellationToken = default)
+        {
+            var existing = await _unitOfWork.FilterRepository.GetByIdAsync(id, cancellationToken);
+            if (existing == null)
+                throw new FilterNotFoundException($"Filter with id {id} not found.");
+
+            _mapper.Map(dto, existing);
+            _unitOfWork.FilterRepository.Update(existing);
+            await _unitOfWork.CompleteAsync(cancellationToken);
+
+            return _mapper.Map<FilterDto>(existing);
+        }
+
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
+        {
+            var existing = await _unitOfWork.FilterRepository.GetByIdAsync(id, cancellationToken);
             if (existing == null)
                 throw new FilterNotFoundException($"Filter with id {id} not found.");
 
             _unitOfWork.FilterRepository.Remove(existing);
-            await _unitOfWork.CompleteAsync();
+            await _unitOfWork.CompleteAsync(cancellationToken);
         }
     }
 }

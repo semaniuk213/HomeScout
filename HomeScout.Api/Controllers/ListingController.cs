@@ -1,9 +1,7 @@
-﻿using FluentValidation;
-using HomeScout.BLL.DTOs;
+﻿using HomeScout.BLL.DTOs;
 using HomeScout.BLL.Services.Interfaces;
 using HomeScout.DAL.Helpers;
 using HomeScout.DAL.Parameters;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeScout.Api.Controllers
@@ -13,99 +11,89 @@ namespace HomeScout.Api.Controllers
     public class ListingController : ControllerBase
     {
         private readonly IListingService _listingService;
-        private readonly IValidator<CreateListingDto> _createListingValidator;
-        private readonly IValidator<UpdateListingDto> _updateListingValidator;
 
-        public ListingController(IListingService listingService, IValidator<CreateListingDto> createListingValidator, IValidator<UpdateListingDto> updateListingValidator)
+        public ListingController(IListingService listingService)
         {
             _listingService = listingService;
-            _createListingValidator = createListingValidator;
-            _updateListingValidator = updateListingValidator;
         }
 
-
+        /// <summary>
+        /// Retrieves all listings with pagination and optional filtering
+        /// </summary>
+        /// <param name="parameters">Listing filter and pagination parameters</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Paged list of listings</returns>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<ListingDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<ListingDto>>> GetAll()
+        public async Task<ActionResult<PagedList<ListingDto>>> GetAll([FromQuery] ListingParameters parameters, CancellationToken cancellationToken)
         {
-            var listings = await _listingService.GetAllAsync();
+            var listings = await _listingService.GetAllAsync(parameters, cancellationToken);
             return Ok(listings);
         }
 
-        [HttpGet("paginated")]
-        [ProducesResponseType(typeof(PagedList<ListingDto>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<PagedList<ListingDto>>> GetAllPaginated([FromQuery] ListingParameters parameters)
-        {
-            var listings = await _listingService.GetAllPaginatedAsync(parameters);
-            return Ok(listings);
-        }
-
+        /// <summary>
+        /// Retrieves a listing by its ID
+        /// </summary>
+        /// <param name="id">Listing ID</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Listing details</returns>
         [HttpGet("{id:int}")]
-        [ProducesResponseType(typeof(ListingDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ListingDto>> GetById(int id)
+        public async Task<ActionResult<ListingDto>> GetById(int id, CancellationToken cancellationToken)
         {
-            var listing = await _listingService.GetByIdAsync(id);
-            if (listing == null)
-                return NotFound();
-
+            var listing = await _listingService.GetByIdAsync(id, cancellationToken);
             return Ok(listing);
         }
 
-        [HttpGet("user/{userId}")]
-        [ProducesResponseType(typeof(IEnumerable<ListingDto>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<ListingDto>>> GetByUserId(Guid userId)
-        {
-            var listings = await _listingService.GetByUserIdAsync(userId);
-            return Ok(listings);
-        }
-
-        [Authorize]
+        /// <summary>
+        /// Creates a new listing
+        /// </summary>
+        /// <param name="dto">Listing creation data</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Created listing</returns>
         [HttpPost]
-        [ProducesResponseType(typeof(ListingDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ListingDto>> Create([FromBody] CreateListingDto dto)
+        public async Task<ActionResult<ListingDto>> Create([FromBody] CreateListingDto dto, CancellationToken cancellationToken)
         {
-            var validationResult = await _createListingValidator.ValidateAsync(dto);
-            if (!validationResult.IsValid)
-                return BadRequest(validationResult.Errors);
-
-            var created = await _listingService.CreateAsync(dto);
+            var created = await _listingService.CreateAsync(dto, cancellationToken);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
-        [Authorize]
+        /// <summary>
+        /// Updates an existing listing
+        /// </summary>
+        /// <param name="id">Listing ID</param>
+        /// <param name="dto">Listing update data</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Updated listing</returns>
         [HttpPut("{id:int}")]
-        [ProducesResponseType(typeof(ListingDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ListingDto>> Update(int id, [FromBody] UpdateListingDto dto)
+        public async Task<ActionResult<ListingDto>> Update(int id, [FromBody] UpdateListingDto dto, CancellationToken cancellationToken)
         {
-            var validationResult = await _updateListingValidator.ValidateAsync(dto);
-            if (!validationResult.IsValid)
-                return BadRequest(validationResult.Errors);
-
-            var updated = await _listingService.UpdateAsync(id, dto);
-            if (updated == null)
-                return NotFound();
-
+            var updated = await _listingService.UpdateAsync(id, dto, cancellationToken);
             return Ok(updated);
         }
 
-        [Authorize]
+        /// <summary>
+        /// Deletes a listing by its ID
+        /// </summary>
+        /// <param name="id">Listing ID</param>
+        /// <param name="cancellationToken">Cancellation token</param>
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
         {
-            await _listingService.DeleteAsync(id);
+            await _listingService.DeleteAsync(id, cancellationToken);
             return NoContent();
         }
     }

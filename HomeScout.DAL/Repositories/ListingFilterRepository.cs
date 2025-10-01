@@ -9,29 +9,12 @@ namespace HomeScout.DAL.Repositories
 {
     public class ListingFilterRepository : GenericRepository<ListingFilter>, IListingFilterRepository
     {
-        public ListingFilterRepository(ApplicationDbContext context) : base(context)
-        {
-        }
+        public ListingFilterRepository(ApplicationDbContext context) : base(context) { }
 
-        public async Task<IEnumerable<ListingFilter>> GetByListingIdAsync(int listingId)
-        {
-            return await dbSet
-                .Include(lf => lf.Filter)
-                .Include(lf => lf.Listing)
-                .Where(lf => lf.ListingId == listingId)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<ListingFilter>> GetByFilterIdAsync(int filterId)
-        {
-            return await dbSet
-                .Include (lf => lf.Filter)
-                .Include(lf => lf.Listing)
-                .Where(lf => lf.FilterId == filterId)
-                .ToListAsync();
-        }
-
-        public async Task<PagedList<ListingFilter>> GetAllPaginatedAsync(ListingFilterParameters parameters, ISortHelper<ListingFilter> sortHelper)
+        public async Task<PagedList<ListingFilter>> GetAllPaginatedAsync(
+            ListingFilterParameters parameters,
+            ISortHelper<ListingFilter> sortHelper,
+            CancellationToken cancellationToken = default)
         {
             var query = dbSet
                 .Include(lf => lf.Filter)
@@ -46,7 +29,7 @@ namespace HomeScout.DAL.Repositories
 
             query = sortHelper.ApplySort(query, parameters.OrderBy);
 
-            return await PagedList<ListingFilter>.ToPagedListAsync(query, parameters.PageNumber, parameters.PageSize);
+            return await PagedList<ListingFilter>.ToPagedListAsync(query, parameters.PageNumber, parameters.PageSize, cancellationToken);
         }
     }
 }

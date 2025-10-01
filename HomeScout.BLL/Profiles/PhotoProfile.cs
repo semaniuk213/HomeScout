@@ -9,7 +9,7 @@ namespace HomeScout.BLL.Profiles
         public PhotoProfile()
         {
             CreateMap<Photo, PhotoDto>()
-                .ForMember(dest => dest.ListingTitle, opt => opt.MapFrom(src => src.Listing.Title));
+                .ForMember(dest => dest.ListingTitle, opt => opt.MapFrom(src => src.Listing != null ? src.Listing.Title : string.Empty));
 
             CreateMap<CreatePhotoDto, Photo>();
             CreateMap<UpdatePhotoDto, Photo>();

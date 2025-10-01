@@ -13,7 +13,7 @@ namespace HomeScout.DAL.Repositories
         {
         }
 
-        public async Task<PagedList<Filter>> GetFilteredAsync(FilterParameters parameters, ISortHelper<Filter> sortHelper)
+        public async Task<PagedList<Filter>> GetFilteredAsync(FilterParameters parameters, ISortHelper<Filter> sortHelper, CancellationToken cancellationToken = default)
         {
             var query = dbSet.AsQueryable();
 
@@ -22,7 +22,7 @@ namespace HomeScout.DAL.Repositories
 
             query = sortHelper.ApplySort(query, parameters.OrderBy);
 
-            return await PagedList<Filter>.ToPagedListAsync(query, parameters.PageNumber, parameters.PageSize);
+            return await PagedList<Filter>.ToPagedListAsync(query, parameters.PageNumber, parameters.PageSize, cancellationToken);
         }
     }
 }

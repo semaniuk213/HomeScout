@@ -20,21 +20,11 @@ namespace HomeScout.BLL.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ListingFilterDto>> GetByListingIdAsync(int listingId)
+        public async Task<PagedList<ListingFilterDto>> GetAllAsync(ListingFilterParameters parameters, CancellationToken cancellationToken = default)
         {
-            var listingFilters = await _unitOfWork.ListingFilterRepository.GetByListingIdAsync(listingId);
-            return _mapper.Map<IEnumerable<ListingFilterDto>>(listingFilters);
-        }
+            var pagedListingFilters = await _unitOfWork.ListingFilterRepository
+                .GetAllPaginatedAsync(parameters, new SortHelper<ListingFilter>(), cancellationToken);
 
-        public async Task<IEnumerable<ListingFilterDto>> GetByFilterIdAsync(int filterId)
-        {
-            var listingFilters = await _unitOfWork.ListingFilterRepository.GetByFilterIdAsync(filterId);
-            return _mapper.Map<IEnumerable<ListingFilterDto>>(listingFilters);
-        }
-
-        public async Task<PagedList<ListingFilterDto>> GetAllPaginatedAsync(ListingFilterParameters parameters)
-        {
-            var pagedListingFilters = await _unitOfWork.ListingFilterRepository.GetAllPaginatedAsync(parameters, new SortHelper<ListingFilter>());
             return PagedList<ListingFilterDto>.Create(
                 _mapper.Map<List<ListingFilterDto>>(pagedListingFilters),
                 pagedListingFilters.TotalCount,
@@ -43,35 +33,36 @@ namespace HomeScout.BLL.Services
             );
         }
 
-        public async Task<ListingFilterDto> CreateAsync(CreateListingFilterDto dto)
+        public async Task<ListingFilterDto> CreateAsync(CreateListingFilterDto dto, CancellationToken cancellationToken = default)
         {
             var listingFilter = _mapper.Map<ListingFilter>(dto);
-            await _unitOfWork.ListingFilterRepository.AddAsync(listingFilter);
-            await _unitOfWork.CompleteAsync();
+            await _unitOfWork.ListingFilterRepository.AddAsync(listingFilter, cancellationToken);
+            await _unitOfWork.CompleteAsync(cancellationToken);
+
             return _mapper.Map<ListingFilterDto>(listingFilter);
         }
 
-        public async Task<ListingFilterDto> UpdateAsync(int id, UpdateListingFilterDto dto)
+        public async Task<ListingFilterDto> UpdateAsync(int id, UpdateListingFilterDto dto, CancellationToken cancellationToken = default)
         {
-            var existing = await _unitOfWork.ListingFilterRepository.GetByIdAsync(id);
+            var existing = await _unitOfWork.ListingFilterRepository.GetByIdAsync(id, cancellationToken);
             if (existing == null)
                 throw new ListingFilterNotFoundException($"ListingFilter with id {id} not found.");
 
             _mapper.Map(dto, existing);
             _unitOfWork.ListingFilterRepository.Update(existing);
-            await _unitOfWork.CompleteAsync();
+            await _unitOfWork.CompleteAsync(cancellationToken);
 
             return _mapper.Map<ListingFilterDto>(existing);
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
-            var existing = await _unitOfWork.ListingFilterRepository.GetByIdAsync(id);
+            var existing = await _unitOfWork.ListingFilterRepository.GetByIdAsync(id, cancellationToken);
             if (existing == null)
                 throw new ListingFilterNotFoundException($"ListingFilter with id {id} not found.");
 
             _unitOfWork.ListingFilterRepository.Remove(existing);
-            await _unitOfWork.CompleteAsync();
+            await _unitOfWork.CompleteAsync(cancellationToken);
         }
     }
 }

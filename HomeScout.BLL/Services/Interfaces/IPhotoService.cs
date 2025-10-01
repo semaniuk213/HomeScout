@@ -6,12 +6,10 @@ namespace HomeScout.BLL.Services.Interfaces
 {
     public interface IPhotoService
     {
-        Task<IEnumerable<PhotoDto>> GetAllAsync();
-        Task<IEnumerable<PhotoDto>> GetByListingIdAsync(int listingId);
-        Task<PagedList<PhotoDto>> GetAllPaginatedAsync(PhotoParameters parameters);
-        Task<PhotoDto> GetByIdAsync(int id);
-        Task<PhotoDto> CreateAsync(CreatePhotoDto dto);
-        Task<PhotoDto> UpdateAsync(int id, UpdatePhotoDto dto);
-        Task DeleteAsync(int id);
+        Task<PagedList<PhotoDto>> GetAllAsync(PhotoParameters parameters, CancellationToken cancellationToken = default);
+        Task<PhotoDto> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<PhotoDto> CreateAsync(CreatePhotoDto dto, CancellationToken cancellationToken = default);
+        Task<PhotoDto> UpdateAsync(int id, UpdatePhotoDto dto, CancellationToken cancellationToken = default);
+        Task DeleteAsync(int id, CancellationToken cancellationToken = default);
     }
 }
