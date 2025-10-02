@@ -11,20 +11,36 @@ namespace HomeScout.ListingService.DAL.Repositories
     {
         public PhotoRepository(ApplicationDbContext context) : base(context) { }
 
+        // Explicit loading
         public override async Task<Photo?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            return await dbSet
-                .Include(p => p.Listing)
-                .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+            var photo = await dbSet.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+
+            if (photo != null)
+            {
+                await context.Entry(photo)
+                    .Reference(p => p.Listing)
+                    .LoadAsync(cancellationToken);
+            }
+
+            return photo;
         }
 
         public override async Task<IEnumerable<Photo>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return await dbSet
-                .Include(p => p.Listing)
-                .ToListAsync(cancellationToken);
+            var photos = await dbSet.ToListAsync(cancellationToken);
+
+            foreach (var photo in photos)
+            {
+                await context.Entry(photo)
+                    .Reference(p => p.Listing)
+                    .LoadAsync(cancellationToken);
+            }
+
+            return photos;
         }
 
+        // Eager Loading
         public async Task<PagedList<Photo>> GetAllPaginatedAsync(
             PhotoParameters parameters,
             ISortHelper<Photo> sortHelper,
