@@ -8,9 +8,19 @@ using HomeScout.ListingService.DAL.Repositories;
 using HomeScout.ListingService.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(configuration) 
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day) 
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
@@ -53,6 +63,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 app.UseMiddleware<ExceptionMiddleware>();
