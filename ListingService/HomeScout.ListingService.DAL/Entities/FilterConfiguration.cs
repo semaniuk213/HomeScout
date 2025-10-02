@@ -1,0 +1,21 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace HomeScout.ListingService.DAL.Entities
+{
+    public class FilterConfiguration : IEntityTypeConfiguration<Filter>
+    {
+        public void Configure(EntityTypeBuilder<Filter> builder)
+        {
+            builder.HasKey(f => f.Id);
+
+            builder.Property(f => f.Name)
+                   .IsRequired()
+                   .HasMaxLength(100);
+
+            builder.HasMany(f => f.Listings)
+                   .WithOne(lf => lf.Filter)
+                   .HasForeignKey(lf => lf.FilterId);
+        }
+    }
+}

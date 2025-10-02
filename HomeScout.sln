@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeScout.Api", "HomeScout.Api\HomeScout.Api.csproj", "{7E0B2A93-00B3-41F2-B83F-7C5DAC9C874E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ListingService", "ListingService", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeScout.BLL", "HomeScout.BLL\HomeScout.BLL.csproj", "{B98FA582-448A-40F1-AB80-DD197D8DA639}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeScout.ListingService.Api", "ListingService\HomeScout.ListingService.Api\HomeScout.ListingService.Api.csproj", "{3227D15F-9E1D-1684-4C28-2C4FF114CA40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeScout.DAL", "HomeScout.DAL\HomeScout.DAL.csproj", "{7F4391EC-857F-4C0C-9570-BF959A967F49}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeScout.ListingService.BLL", "ListingService\HomeScout.ListingService.BLL\HomeScout.ListingService.BLL.csproj", "{AC804E8A-72CD-A5F4-761A-6D6EA0EFED5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeScout.ListingService.DAL", "ListingService\HomeScout.ListingService.DAL\HomeScout.ListingService.DAL.csproj", "{2C639D66-D7B0-BEC2-8575-FF65BF45AA84}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,21 +17,26 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7E0B2A93-00B3-41F2-B83F-7C5DAC9C874E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7E0B2A93-00B3-41F2-B83F-7C5DAC9C874E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7E0B2A93-00B3-41F2-B83F-7C5DAC9C874E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7E0B2A93-00B3-41F2-B83F-7C5DAC9C874E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B98FA582-448A-40F1-AB80-DD197D8DA639}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B98FA582-448A-40F1-AB80-DD197D8DA639}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B98FA582-448A-40F1-AB80-DD197D8DA639}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B98FA582-448A-40F1-AB80-DD197D8DA639}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7F4391EC-857F-4C0C-9570-BF959A967F49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F4391EC-857F-4C0C-9570-BF959A967F49}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F4391EC-857F-4C0C-9570-BF959A967F49}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F4391EC-857F-4C0C-9570-BF959A967F49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3227D15F-9E1D-1684-4C28-2C4FF114CA40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3227D15F-9E1D-1684-4C28-2C4FF114CA40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3227D15F-9E1D-1684-4C28-2C4FF114CA40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3227D15F-9E1D-1684-4C28-2C4FF114CA40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC804E8A-72CD-A5F4-761A-6D6EA0EFED5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC804E8A-72CD-A5F4-761A-6D6EA0EFED5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC804E8A-72CD-A5F4-761A-6D6EA0EFED5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC804E8A-72CD-A5F4-761A-6D6EA0EFED5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C639D66-D7B0-BEC2-8575-FF65BF45AA84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C639D66-D7B0-BEC2-8575-FF65BF45AA84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C639D66-D7B0-BEC2-8575-FF65BF45AA84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C639D66-D7B0-BEC2-8575-FF65BF45AA84}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3227D15F-9E1D-1684-4C28-2C4FF114CA40} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{AC804E8A-72CD-A5F4-761A-6D6EA0EFED5C} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{2C639D66-D7B0-BEC2-8575-FF65BF45AA84} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0002BFE1-B008-42D6-8DFC-D7915EDE4F60}
